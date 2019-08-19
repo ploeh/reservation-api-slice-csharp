@@ -12,6 +12,13 @@ namespace Ploeh.Samples.BookingApi
 {
     public class CompositionRoot : IControllerActivator
     {
+        public CompositionRoot(int capacity)
+        {
+            Capacity = capacity;
+        }
+
+        public int Capacity { get; }
+
         public object Create(ControllerContext context)
         {
             var controllerType =
@@ -21,7 +28,7 @@ namespace Ploeh.Samples.BookingApi
                 return new ReservationsController(
                     new Validator(),
                     new Mapper(),
-                    new MaîtreD(10, null));
+                    new MaîtreD(Capacity, null));
 
             throw new InvalidOperationException(
                 $"Unknown controller type: {controllerType}.");

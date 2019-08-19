@@ -18,7 +18,8 @@ namespace Ploeh.Samples.BookingApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddSingleton<IControllerActivator>(new CompositionRoot());
+            services.AddSingleton<IControllerActivator>(
+                new CompositionRoot(10));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
