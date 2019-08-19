@@ -1,6 +1,7 @@
 ﻿/* Copyright (c) Mark Seemann 2019 all rights reserved
  * Permission is hereby granted to share this code for educational purposes
  * only, under the condition that this header remains intact. */
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,12 @@ namespace Ploeh.Samples.BookingApi
                 return BadRequest(validationMsg);
 
             var reservation = Mapper.Map(dto);
-            return Ok(MaîtreD.TryAccept(reservation));
+            var id = MaîtreD.TryAccept(reservation);
+            if (id == null)
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    "Couldn't accept.");
+            return Ok(id.Value);
         }
     }
 }
