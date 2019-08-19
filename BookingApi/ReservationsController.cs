@@ -12,16 +12,28 @@ namespace Ploeh.Samples.BookingApi
     [ApiController, Route("[controller]")]
     public class ReservationsController : ControllerBase
     {
-        public ReservationsController(IValidator validator)
+        public ReservationsController(
+            IValidator validator,
+            IMapper mapper,
+            IMaîtreD maîtreD)
         {
             Validator = validator;
+            Mapper = mapper;
+            MaîtreD = maîtreD;
         }
 
         public IValidator Validator { get; }
+        public IMapper Mapper { get; }
+        public IMaîtreD MaîtreD { get; }
 
         public ActionResult Post(ReservationDto dto)
         {
-            return BadRequest(Validator.Validate(dto));
+            var validationMsg = Validator.Validate(dto);
+            if (validationMsg != "")
+                return BadRequest(validationMsg);
+
+            var reservation = Mapper.Map(dto);
+            return Ok(MaîtreD.TryAccept(reservation));
         }
     }
 }
