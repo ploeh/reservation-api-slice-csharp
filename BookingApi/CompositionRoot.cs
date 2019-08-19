@@ -12,12 +12,14 @@ namespace Ploeh.Samples.BookingApi
 {
     public class CompositionRoot : IControllerActivator
     {
-        public CompositionRoot(int capacity)
+        public CompositionRoot(int capacity, string connectionString)
         {
             Capacity = capacity;
+            ConnectionString = connectionString;
         }
 
         public int Capacity { get; }
+        public string ConnectionString { get; }
 
         public object Create(ControllerContext context)
         {
@@ -28,7 +30,9 @@ namespace Ploeh.Samples.BookingApi
                 return new ReservationsController(
                     new Validator(),
                     new Mapper(),
-                    new MaîtreD(Capacity, null));
+                    new MaîtreD(
+                        Capacity, 
+                        new SqlReservationsRepository(ConnectionString)));
 
             throw new InvalidOperationException(
                 $"Unknown controller type: {controllerType}.");

@@ -28,8 +28,9 @@ namespace Ploeh.Samples.BookingApi
             services.AddMvc();
 
             var capacity = Configuration.GetValue<int>("Capacity");
+            var connectionString = Configuration.GetConnectionString("Booking");
             services.AddSingleton<IControllerActivator>(
-                new CompositionRoot(capacity));
+                new CompositionRoot(capacity, connectionString));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
