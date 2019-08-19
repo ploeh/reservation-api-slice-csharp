@@ -30,5 +30,25 @@ namespace Ploeh.Samples.BookingApi.UnitTests
 
             Assert.Equal(42, actual);
         }
+
+        [Fact]
+        public void TryAcceptOnInsufficientCapacity()
+        {
+            var reservation = new Reservation
+            {
+                Date = new DateTime(2018, 8, 30),
+                Quantity = 4
+            };
+            var td = new Mock<IReservationsRepository>();
+            td
+                .Setup(r => r.ReadReservations(reservation.Date))
+                .Returns(new[] { new Reservation { Quantity = 7 } });
+            var sut = new MaîtreD(capacity: 10, td.Object);
+
+            var actual = sut.TryAccept(reservation);
+
+            Assert.Null(actual);
+            td.Verify(r => r.Create(It.IsAny<Reservation>()), Times.Never);
+        }
     }
 }
