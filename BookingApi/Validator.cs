@@ -12,7 +12,9 @@ namespace Ploeh.Samples.BookingApi
     {
         public string Validate(ReservationDto dto)
         {
-            return "Boo!";
+            if (!DateTime.TryParse(dto.Date, out var _))
+                return $"Invalid date: {dto.Date}.";
+            return "";
         }
     }
 }
