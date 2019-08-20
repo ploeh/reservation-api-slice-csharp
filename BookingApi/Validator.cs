@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ploeh.Samples.BookingApi
 {
-    public class Validator : IValidator
+    public class Validator
     {
         public string Validate(ReservationDto dto)
         {
