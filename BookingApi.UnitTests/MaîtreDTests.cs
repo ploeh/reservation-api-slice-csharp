@@ -12,7 +12,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
     public class MaîtreDTests
     {
         [Fact]
-        public void TryAcceptReturnsReservationIdInHappyPathScenario()
+        public void CanAcceptReturnsReservationInHappyPathScenario()
         {
             var reservation = new Reservation
             {
@@ -20,16 +20,15 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 Quantity = 4
             };
             var td = new Mock<IReservationsRepository>();
-            td.Setup(r => r.Create(reservation)).Returns(42);
             var sut = new MaîtreD(capacity: 10, td.Object);
 
-            var actual = sut.TryAccept(new Reservation[0], reservation);
+            var actual = sut.CanAccept(new Reservation[0], reservation);
 
-            Assert.Equal(42, actual);
+            Assert.True(actual);
         }
 
         [Fact]
-        public void TryAcceptOnInsufficientCapacity()
+        public void CanAcceptOnInsufficientCapacity()
         {
             var reservation = new Reservation
             {
@@ -39,11 +38,11 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             var td = new Mock<IReservationsRepository>();
             var sut = new MaîtreD(capacity: 10, td.Object);
 
-            var actual = sut.TryAccept(
+            var actual = sut.CanAccept(
                 new[] { new Reservation { Quantity = 7 } },
                 reservation);
 
-            Assert.Null(actual);
+            Assert.False(actual);
             td.Verify(r => r.Create(It.IsAny<Reservation>()), Times.Never);
         }
     }

@@ -43,13 +43,15 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             var maîtreDTD = new Mock<IMaîtreD>();
             maîtreDTD
                 .Setup(m => m
-                    .TryAccept(It.IsAny<IEnumerable<Reservation>>(), r))
-                .Returns(1337);
+                    .CanAccept(It.IsAny<IEnumerable<Reservation>>(), r))
+                .Returns(true);
+            var repositoryTD = new Mock<IReservationsRepository>();
+            repositoryTD.Setup(repo => repo.Create(r)).Returns(1337);
             var sut = new ReservationsController(
                 validatorTD.Object,
                 mapperTD.Object,
                 maîtreDTD.Object,
-                new Mock<IReservationsRepository>().Object);
+                repositoryTD.Object);
 
             var actual = sut.Post(dto);
 
@@ -69,8 +71,8 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             var maîtreDTD = new Mock<IMaîtreD>();
             maîtreDTD
                 .Setup(m => m
-                    .TryAccept(It.IsAny<IEnumerable<Reservation>>(), r))
-                .Returns((int?)null);
+                    .CanAccept(It.IsAny<IEnumerable<Reservation>>(), r))
+                .Returns(false);
             var sut = new ReservationsController(
                 validatorTD.Object,
                 mapperTD.Object,

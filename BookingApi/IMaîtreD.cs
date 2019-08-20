@@ -10,7 +10,7 @@ namespace Ploeh.Samples.BookingApi
 {
     public interface IMaîtreD
     {
-        int? TryAccept(
+        bool CanAccept(
             IEnumerable<Reservation> reservations,
             Reservation reservation);
     }

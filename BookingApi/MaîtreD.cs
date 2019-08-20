@@ -19,16 +19,16 @@ namespace Ploeh.Samples.BookingApi
         public int Capacity { get; }
         public IReservationsRepository Repository { get; }
 
-        public int? TryAccept(
+        public bool CanAccept(
             IEnumerable<Reservation> reservations,
             Reservation reservation)
         {
             var reservedSeats = reservations.Sum(r => r.Quantity);
 
             if (Capacity < reservedSeats + reservation.Quantity)
-                return null;
+                return false;
 
-            return Repository.Create(reservation);
+            return true;
         }
     }
 }

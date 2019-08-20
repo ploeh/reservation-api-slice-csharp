@@ -38,12 +38,13 @@ namespace Ploeh.Samples.BookingApi
 
             var reservation = Mapper.Map(dto);
             var reservations = Repository.ReadReservations(reservation.Date);
-            var id = MaîtreD.TryAccept(reservations, reservation);
-            if (id == null)
+            var accepted = MaîtreD.CanAccept(reservations, reservation);
+            if (!accepted)
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,
                     "Couldn't accept.");
-            return Ok(id.Value);
+            var id = Repository.Create(reservation);
+            return Ok(id);
         }
     }
 }
