@@ -23,7 +23,8 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 validatorTD.Object,
                 new Mock<IMapper>().Object,
                 new Mock<IMaîtreD>().Object,
-                new Mock<IReservationsRepository>().Object);
+                new Mock<IReservationsRepository>().Object,
+                10);
 
             var actual = sut.Post(dto);
 
@@ -32,7 +33,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
         }
 
         [Fact]
-        public void PostValidDtoWhenEnoughCapacityExists()
+        public void PostValidDtoWhenNoPriorReservationsExist()
         {
             var dto = new ReservationDto { };
             var r = new Reservation { };
@@ -41,17 +42,14 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             var mapperTD = new Mock<IMapper>();
             mapperTD.Setup(m => m.Map(dto)).Returns(r);
             var maîtreDTD = new Mock<IMaîtreD>();
-            maîtreDTD
-                .Setup(m => m
-                    .CanAccept(It.IsAny<IEnumerable<Reservation>>(), r))
-                .Returns(true);
             var repositoryTD = new Mock<IReservationsRepository>();
             repositoryTD.Setup(repo => repo.Create(r)).Returns(1337);
             var sut = new ReservationsController(
                 validatorTD.Object,
                 mapperTD.Object,
                 maîtreDTD.Object,
-                repositoryTD.Object);
+                repositoryTD.Object,
+                10);
 
             var actual = sut.Post(dto);
 
@@ -63,21 +61,18 @@ namespace Ploeh.Samples.BookingApi.UnitTests
         public void PostValidDtoWhenSoldOut()
         {
             var dto = new ReservationDto { };
-            var r = new Reservation { };
+            var r = new Reservation { Quantity = 2 };
             var validatorTD = new Mock<IValidator>();
             validatorTD.Setup(v => v.Validate(dto)).Returns("");
             var mapperTD = new Mock<IMapper>();
             mapperTD.Setup(m => m.Map(dto)).Returns(r);
             var maîtreDTD = new Mock<IMaîtreD>();
-            maîtreDTD
-                .Setup(m => m
-                    .CanAccept(It.IsAny<IEnumerable<Reservation>>(), r))
-                .Returns(false);
             var sut = new ReservationsController(
                 validatorTD.Object,
                 mapperTD.Object,
                 maîtreDTD.Object,
-                new Mock<IReservationsRepository>().Object);
+                new Mock<IReservationsRepository>().Object,
+                1);
 
             var actual = sut.Post(dto);
 
