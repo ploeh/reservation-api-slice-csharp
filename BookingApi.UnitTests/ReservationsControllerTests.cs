@@ -17,11 +17,11 @@ namespace Ploeh.Samples.BookingApi.UnitTests
         [Fact]
         public void PostInvalidDto()
         {
-            var dto = new ReservationDto { };
             var sut = new ReservationsController(
-                new Mock<IReservationsRepository>().Object,
+                new FakeReservationsRepository(),
                 10);
 
+            var dto = new ReservationDto { };
             var actual = sut.Post(dto);
 
             var br = Assert.IsAssignableFrom<BadRequestObjectResult>(actual);
@@ -32,28 +32,23 @@ namespace Ploeh.Samples.BookingApi.UnitTests
         [Fact]
         public void PostValidDtoWhenNoPriorReservationsExist()
         {
-            var dto = new ReservationDto { Date = "2019-08-20", Quantity = 1 };
-            var r = Mapper.Map(dto);
-            var repositoryTD = new Mock<IReservationsRepository>();
-            repositoryTD.Setup(repo => repo.Create(It.Is(Like(r)))).Returns(1337);
-            var sut = new ReservationsController(
-                repositoryTD.Object,
-                10);
+            var repository = new FakeReservationsRepository();
+            var sut = new ReservationsController(repository, 10);
 
+            var dto = new ReservationDto { Date = "2019-08-20", Quantity = 1 };
             var actual = sut.Post(dto);
 
-            var ok = Assert.IsAssignableFrom<OkObjectResult>(actual);
-            Assert.Equal(1337, ok.Value);
+            Assert.IsAssignableFrom<OkObjectResult>(actual);
+            Assert.NotEmpty(repository);
         }
 
         [Fact]
         public void PostValidDtoWhenSoldOut()
         {
-            var dto = new ReservationDto { Date = "2019-08-20", Quantity = 2 };
-            var sut = new ReservationsController(
-                new Mock<IReservationsRepository>().Object,
-                1);
+            var repository = new FakeReservationsRepository();
+            var sut = new ReservationsController(repository, 1);
 
+            var dto = new ReservationDto { Date = "2019-08-20", Quantity = 2 };
             var actual = sut.Post(dto);
 
             var c = Assert.IsAssignableFrom<ObjectResult>(actual);
