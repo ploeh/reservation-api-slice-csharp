@@ -28,7 +28,6 @@ namespace Ploeh.Samples.BookingApi
 
             if (controllerType == typeof(ReservationsController))
                 return new ReservationsController(
-                    new Validator(),
                     new Mapper(),
                     new SqlReservationsRepository(ConnectionString),
                     Capacity);
