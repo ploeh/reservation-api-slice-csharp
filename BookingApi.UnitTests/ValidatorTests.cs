@@ -17,9 +17,8 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             {
                 Date = "2018-08-30T19:47:00"
             };
-            var sut = new Validator();
 
-            var actual = sut.Validate(dto);
+            var actual = Validator.Validate(dto);
 
             Assert.Empty(actual);
         }
@@ -31,9 +30,8 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             {
                 Date = "Invalid date"
             };
-            var sut = new Validator();
 
-            var actual = sut.Validate(dto);
+            var actual = Validator.Validate(dto);
 
             Assert.NotEmpty(actual);
         }

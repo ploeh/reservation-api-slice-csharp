@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Ploeh.Samples.BookingApi
 {
-    public class Validator
+    public static class Validator
     {
-        public string Validate(ReservationDto dto)
+        public static string Validate(ReservationDto dto)
         {
             if (!DateTime.TryParse(dto.Date, out var _))
                 return $"Invalid date: {dto.Date}.";
