@@ -16,17 +16,14 @@ namespace Ploeh.Samples.BookingApi
         private readonly MaîtreD maîtreD;
 
         public ReservationsController(
-            IMapper mapper,
             IReservationsRepository repository,
             int capacity)
         {
-            Mapper = mapper;
             Repository = repository;
             Capacity = capacity;
             maîtreD = new MaîtreD(Capacity);
         }
 
-        public IMapper Mapper { get; }
         public IReservationsRepository Repository { get; }
         public int Capacity { get; }
 

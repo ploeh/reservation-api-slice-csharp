@@ -19,7 +19,6 @@ namespace Ploeh.Samples.BookingApi.UnitTests
         {
             var dto = new ReservationDto { };
             var sut = new ReservationsController(
-                new Mock<IMapper>().Object,
                 new Mock<IReservationsRepository>().Object,
                 10);
 
@@ -35,11 +34,9 @@ namespace Ploeh.Samples.BookingApi.UnitTests
         {
             var dto = new ReservationDto { Date = "2019-08-20", Quantity = 1 };
             var r = new Mapper().Map(dto);
-            var mapperTD = new Mock<IMapper>();
             var repositoryTD = new Mock<IReservationsRepository>();
             repositoryTD.Setup(repo => repo.Create(It.Is(Like(r)))).Returns(1337);
             var sut = new ReservationsController(
-                mapperTD.Object,
                 repositoryTD.Object,
                 10);
 
@@ -53,9 +50,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
         public void PostValidDtoWhenSoldOut()
         {
             var dto = new ReservationDto { Date = "2019-08-20", Quantity = 2 };
-            var mapperTD = new Mock<IMapper>();
             var sut = new ReservationsController(
-                mapperTD.Object,
                 new Mock<IReservationsRepository>().Object,
                 1);
 
