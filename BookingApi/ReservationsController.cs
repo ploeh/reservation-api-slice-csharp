@@ -33,7 +33,7 @@ namespace Ploeh.Samples.BookingApi
             if (validationMsg != "")
                 return BadRequest(validationMsg);
 
-            var reservation = new Mapper().Map(dto);
+            var reservation = Mapper.Map(dto);
             var reservations = Repository.ReadReservations(reservation.Date);
 
             var accepted = maîtreD.CanAccept(reservations, reservation);

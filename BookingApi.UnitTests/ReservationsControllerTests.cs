@@ -33,7 +33,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
         public void PostValidDtoWhenNoPriorReservationsExist()
         {
             var dto = new ReservationDto { Date = "2019-08-20", Quantity = 1 };
-            var r = new Mapper().Map(dto);
+            var r = Mapper.Map(dto);
             var repositoryTD = new Mock<IReservationsRepository>();
             repositoryTD.Setup(repo => repo.Create(It.Is(Like(r)))).Returns(1337);
             var sut = new ReservationsController(

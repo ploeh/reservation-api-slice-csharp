@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Ploeh.Samples.BookingApi
 {
-    public class Mapper
+    public static class Mapper
     {
-        public Reservation Map(ReservationDto dto)
+        public static Reservation Map(ReservationDto dto)
         {
             return new Reservation
             {
