@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ploeh.Samples.BookingApi
 {
-    public class Mapper : IMapper
+    public class Mapper
     {
         public Reservation Map(ReservationDto dto)
         {
