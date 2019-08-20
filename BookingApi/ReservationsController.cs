@@ -39,8 +39,8 @@ namespace Ploeh.Samples.BookingApi
             var reservation = Mapper.Map(dto);
             var reservations = Repository.ReadReservations(reservation.Date);
 
-            var accepted =
-                new MaîtreD(Capacity).CanAccept(reservations, reservation);
+            var maîtreD = new MaîtreD(Capacity);
+            var accepted = maîtreD.CanAccept(reservations, reservation);
             if (!accepted)
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,
