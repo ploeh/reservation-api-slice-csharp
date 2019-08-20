@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
+using static Ploeh.Samples.BookingApi.UnitTests.Resemblance;
 
 namespace Ploeh.Samples.BookingApi.UnitTests
 {
@@ -32,12 +33,11 @@ namespace Ploeh.Samples.BookingApi.UnitTests
         [Fact]
         public void PostValidDtoWhenNoPriorReservationsExist()
         {
-            var dto = new ReservationDto { Date = "2019-08-20" };
-            var r = new Reservation { };
+            var dto = new ReservationDto { Date = "2019-08-20", Quantity = 1 };
+            var r = new Mapper().Map(dto);
             var mapperTD = new Mock<IMapper>();
-            mapperTD.Setup(m => m.Map(dto)).Returns(r);
             var repositoryTD = new Mock<IReservationsRepository>();
-            repositoryTD.Setup(repo => repo.Create(r)).Returns(1337);
+            repositoryTD.Setup(repo => repo.Create(It.Is(Like(r)))).Returns(1337);
             var sut = new ReservationsController(
                 mapperTD.Object,
                 repositoryTD.Object,
@@ -52,10 +52,8 @@ namespace Ploeh.Samples.BookingApi.UnitTests
         [Fact]
         public void PostValidDtoWhenSoldOut()
         {
-            var dto = new ReservationDto { Date = "2019-08-20" };
-            var r = new Reservation { Quantity = 2 };
+            var dto = new ReservationDto { Date = "2019-08-20", Quantity = 2 };
             var mapperTD = new Mock<IMapper>();
-            mapperTD.Setup(m => m.Map(dto)).Returns(r);
             var sut = new ReservationsController(
                 mapperTD.Object,
                 new Mock<IReservationsRepository>().Object,
