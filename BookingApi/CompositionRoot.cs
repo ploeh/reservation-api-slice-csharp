@@ -27,15 +27,11 @@ namespace Ploeh.Samples.BookingApi
                 context.ActionDescriptor.ControllerTypeInfo.AsType();
 
             if (controllerType == typeof(ReservationsController))
-            {
-                var repository =
-                    new SqlReservationsRepository(ConnectionString);
                 return new ReservationsController(
                     new Validator(),
                     new Mapper(),
-                    new MaîtreD(Capacity, repository),
-                    repository);
-            }
+                    new MaîtreD(Capacity),
+                    new SqlReservationsRepository(ConnectionString));
 
             throw new InvalidOperationException(
                 $"Unknown controller type: {controllerType}.");

@@ -19,8 +19,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 Date = new DateTime(2018, 8, 30),
                 Quantity = 4
             };
-            var td = new Mock<IReservationsRepository>();
-            var sut = new MaîtreD(capacity: 10, td.Object);
+            var sut = new MaîtreD(capacity: 10);
 
             var actual = sut.CanAccept(new Reservation[0], reservation);
 
@@ -35,15 +34,13 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 Date = new DateTime(2018, 8, 30),
                 Quantity = 4
             };
-            var td = new Mock<IReservationsRepository>();
-            var sut = new MaîtreD(capacity: 10, td.Object);
+            var sut = new MaîtreD(capacity: 10);
 
             var actual = sut.CanAccept(
                 new[] { new Reservation { Quantity = 7 } },
                 reservation);
 
             Assert.False(actual);
-            td.Verify(r => r.Create(It.IsAny<Reservation>()), Times.Never);
         }
     }
 }
