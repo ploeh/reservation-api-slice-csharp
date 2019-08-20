@@ -20,13 +20,10 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 Quantity = 4
             };
             var td = new Mock<IReservationsRepository>();
-            td
-                .Setup(r => r.ReadReservations(reservation.Date))
-                .Returns(new Reservation[0]);
             td.Setup(r => r.Create(reservation)).Returns(42);
             var sut = new MaîtreD(capacity: 10, td.Object);
 
-            var actual = sut.TryAccept(reservation);
+            var actual = sut.TryAccept(new Reservation[0], reservation);
 
             Assert.Equal(42, actual);
         }
@@ -40,12 +37,11 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 Quantity = 4
             };
             var td = new Mock<IReservationsRepository>();
-            td
-                .Setup(r => r.ReadReservations(reservation.Date))
-                .Returns(new[] { new Reservation { Quantity = 7 } });
             var sut = new MaîtreD(capacity: 10, td.Object);
 
-            var actual = sut.TryAccept(reservation);
+            var actual = sut.TryAccept(
+                new[] { new Reservation { Quantity = 7 } },
+                reservation);
 
             Assert.Null(actual);
             td.Verify(r => r.Create(It.IsAny<Reservation>()), Times.Never);
