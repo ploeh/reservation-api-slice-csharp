@@ -35,7 +35,7 @@ namespace Ploeh.Samples.BookingApi
 
         public ActionResult Post(ReservationDto dto)
         {
-            var validationMsg = Validator.Validate(dto);
+            var validationMsg = new Validator().Validate(dto);
             if (validationMsg != "")
                 return BadRequest(validationMsg);
 
