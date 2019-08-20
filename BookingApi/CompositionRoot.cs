@@ -30,7 +30,6 @@ namespace Ploeh.Samples.BookingApi
                 return new ReservationsController(
                     new Validator(),
                     new Mapper(),
-                    new MaîtreD(Capacity),
                     new SqlReservationsRepository(ConnectionString),
                     Capacity);
 

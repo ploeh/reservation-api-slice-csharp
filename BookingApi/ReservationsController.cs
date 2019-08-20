@@ -16,20 +16,17 @@ namespace Ploeh.Samples.BookingApi
         public ReservationsController(
             IValidator validator,
             IMapper mapper,
-            IMaîtreD maîtreD,
             IReservationsRepository repository,
             int capacity)
         {
             Validator = validator;
             Mapper = mapper;
-            MaîtreD = maîtreD;
             Repository = repository;
             Capacity = capacity;
         }
 
         public IValidator Validator { get; }
         public IMapper Mapper { get; }
-        public IMaîtreD MaîtreD { get; }
         public IReservationsRepository Repository { get; }
         public int Capacity { get; }
 
