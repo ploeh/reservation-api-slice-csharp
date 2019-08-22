@@ -11,17 +11,18 @@ namespace Ploeh.Samples.BookingApi.UnitTests
     public class MaîtreDTests
     {
         [Theory]
-        [InlineData( 4, 10)]
-        [InlineData(10, 10)]
-        [InlineData(20, 20)]
-        [InlineData( 1, 22)]
+        [InlineData("2018-08-30",  4, 10)]
+        [InlineData("2019-09-29", 10, 10)]
+        [InlineData("2020-10-28", 20, 20)]
+        [InlineData("2021-11-27",  1, 22)]
         public void CanAcceptReturnsReservationInHappyPathScenario(
+            string date,
             int quantity,
             int capacity)
         {
             var reservation = new Reservation
             {
-                Date = new DateTime(2018, 8, 30),
+                Date = DateTime.Parse(date),
                 Quantity = quantity
             };
             var sut = new MaîtreD(capacity);
