@@ -11,16 +11,20 @@ namespace Ploeh.Samples.BookingApi.UnitTests
     public class MaîtreDTests
     {
         [Theory]
-        [InlineData(4)]
-        [InlineData(10)]
-        public void CanAcceptReturnsReservationInHappyPathScenario(int quantity)
+        [InlineData( 4, 10)]
+        [InlineData(10, 10)]
+        [InlineData(20, 20)]
+        [InlineData( 1, 22)]
+        public void CanAcceptReturnsReservationInHappyPathScenario(
+            int quantity,
+            int capacity)
         {
             var reservation = new Reservation
             {
                 Date = new DateTime(2018, 8, 30),
                 Quantity = quantity
             };
-            var sut = new MaîtreD(capacity: 10);
+            var sut = new MaîtreD(capacity);
 
             var actual = sut.CanAccept(new Reservation[0], reservation);
 
