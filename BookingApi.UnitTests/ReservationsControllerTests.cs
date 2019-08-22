@@ -12,12 +12,15 @@ namespace Ploeh.Samples.BookingApi.UnitTests
 {
     public class ReservationsControllerTests
     {
-        [Fact]
-        public void PostInvalidDto()
+        [Theory]
+        [InlineData(10)]
+        [InlineData( 1)]
+        [InlineData(99)]
+        public void PostInvalidDto(int capacity)
         {
             var sut = new ReservationsController(
                 new FakeReservationsRepository(),
-                10);
+                capacity);
 
             var dto = new ReservationDto { };
             var actual = sut.Post(dto);
@@ -27,26 +30,42 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             Assert.NotEmpty(msg);
         }
 
-        [Fact]
-        public void PostValidDtoWhenNoPriorReservationsExist()
+        [Theory]
+        [InlineData(10, 1)]
+        [InlineData( 9, 9)]
+        [InlineData(30, 4)]
+        public void PostValidDtoWhenNoPriorReservationsExist(
+            int capacity,
+            int quantity)
         {
             var repository = new FakeReservationsRepository();
-            var sut = new ReservationsController(repository, 10);
+            var sut = new ReservationsController(repository, capacity);
 
-            var dto = new ReservationDto { Date = "2019-08-20", Quantity = 1 };
+            var dto = new ReservationDto
+            {
+                Date = "2019-08-20",
+                Quantity = quantity
+            };
             var actual = sut.Post(dto);
 
             Assert.IsAssignableFrom<OkObjectResult>(actual);
             Assert.NotEmpty(repository);
         }
 
-        [Fact]
-        public void PostValidDtoWhenSoldOut()
+        [Theory]
+        [InlineData( 1,  2)]
+        [InlineData( 1,  3)]
+        [InlineData(11, 15)]
+        public void PostValidDtoWhenSoldOut(int capacity, int quantity)
         {
             var repository = new FakeReservationsRepository();
-            var sut = new ReservationsController(repository, 1);
+            var sut = new ReservationsController(repository, capacity);
 
-            var dto = new ReservationDto { Date = "2019-08-20", Quantity = 2 };
+            var dto = new ReservationDto
+            {
+                Date = "2019-08-20",
+                Quantity = quantity
+            };
             var actual = sut.Post(dto);
 
             var c = Assert.IsAssignableFrom<ObjectResult>(actual);
