@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
-using static Ploeh.Samples.BookingApi.UnitTests.Resemblance;
 
 namespace Ploeh.Samples.BookingApi.UnitTests
 {
