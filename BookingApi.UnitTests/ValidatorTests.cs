@@ -10,12 +10,15 @@ namespace Ploeh.Samples.BookingApi.UnitTests
 {
     public class ValidatorTests
     {
-        [Fact]
-        public void ValidDate()
+        [Theory]
+        [InlineData("2018-08-30")]
+        [InlineData("2018-08-30T19:47:00")]
+        [InlineData("2022-04-01 12:01:02")]
+        public void ValidDate(string date)
         {
             var dto = new ReservationDto
             {
-                Date = "2018-08-30T19:47:00"
+                Date = date
             };
 
             var actual = Validator.Validate(dto);
@@ -23,12 +26,15 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             Assert.Empty(actual);
         }
 
-        [Fact]
-        public void InvalidDate()
+        [Theory]
+        [InlineData("Invalid date")]
+        [InlineData("foo")]
+        [InlineData("  ")]
+        public void InvalidDate(string date)
         {
             var dto = new ReservationDto
             {
-                Date = "Invalid date"
+                Date = date
             };
 
             var actual = Validator.Validate(dto);
