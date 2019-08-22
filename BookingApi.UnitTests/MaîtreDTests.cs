@@ -31,15 +31,18 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             Assert.True(actual);
         }
 
-        [Fact]
-        public void CanAcceptOnInsufficientCapacity()
+        [Theory]
+        [InlineData( 4, 10)]
+        [InlineData( 3,  3)]
+        [InlineData(11, 14)]
+        public void CanAcceptOnInsufficientCapacity(int quantity, int capacity)
         {
             var reservation = new Reservation
             {
                 Date = new DateTime(2018, 8, 30),
-                Quantity = 4
+                Quantity = quantity
             };
-            var sut = new MaîtreD(capacity: 10);
+            var sut = new MaîtreD(capacity);
 
             var actual = sut.CanAccept(
                 new[] { new Reservation { Quantity = 7 } },
