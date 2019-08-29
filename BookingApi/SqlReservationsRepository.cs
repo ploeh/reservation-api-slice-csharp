@@ -64,6 +64,22 @@ namespace Ploeh.Samples.BookingApi
             AND MONTH([Date]) <= MONTH(@MaxDate)
             AND DAY([Date]) <= DAY(@MaxDate)";
 
+        public int ReadReservationId(Guid guid)
+        {
+            const string sql = @"
+                SELECT [Id] FROM [dbo].[Reservations]
+                WHERE [Guid] = @Guid";
+
+            using (var conn = new SqlConnection(ConnectionString))
+            using (var cmd = new SqlCommand(sql, conn))
+            {
+                cmd.Parameters.Add(new SqlParameter("@Guid", guid));
+
+                conn.Open();
+                return (int) cmd.ExecuteScalar();
+            }
+        }
+
         public int Create(Reservation reservation)
         {
             using (var conn = new SqlConnection(ConnectionString))
