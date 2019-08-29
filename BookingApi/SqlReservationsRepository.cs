@@ -80,7 +80,7 @@ namespace Ploeh.Samples.BookingApi
             }
         }
 
-        public int Create(Reservation reservation)
+        public void Create(Reservation reservation)
         {
             using (var conn = new SqlConnection(ConnectionString))
             using (var cmd = new SqlCommand(createReservationSql, conn))
@@ -97,7 +97,7 @@ namespace Ploeh.Samples.BookingApi
                     new SqlParameter("@Quantity", reservation.Quantity));
 
                 conn.Open();
-                return (int)cmd.ExecuteScalar();
+                cmd.ExecuteNonQuery();
             }
         }
 

@@ -10,12 +10,11 @@ namespace Ploeh.Samples.BookingApi.UnitTests
     {
         private int nextKey;
 
-        public int Create(Reservation reservation)
+        public void Create(Reservation reservation)
         {
             // Not thread-safe...
             var key = ++nextKey;
             Add(key, reservation);
-            return key;
         }
 
         public int ReadReservationId(Guid guid)

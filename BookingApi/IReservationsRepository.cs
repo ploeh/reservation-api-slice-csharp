@@ -10,6 +10,6 @@ namespace Ploeh.Samples.BookingApi
     {
         IEnumerable<Reservation> ReadReservations(DateTime date);
         int ReadReservationId(Guid guid);
-        int Create(Reservation reservation);
+        void Create(Reservation reservation);
     }
 }
