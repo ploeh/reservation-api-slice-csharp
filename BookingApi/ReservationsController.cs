@@ -16,8 +16,8 @@ namespace Ploeh.Samples.BookingApi
         private readonly MaîtreD maîtreD;
 
         public ReservationsController(
-            IReservationsRepository repository,
-            int capacity)
+            int capacity,
+            IReservationsRepository repository)
         {
             Repository = repository;
             Capacity = capacity;

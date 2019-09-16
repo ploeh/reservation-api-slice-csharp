@@ -28,8 +28,8 @@ namespace Ploeh.Samples.BookingApi
 
             if (controllerType == typeof(ReservationsController))
                 return new ReservationsController(
-                    new SqlReservationsRepository(ConnectionString),
-                    Capacity);
+                    Capacity,
+                    new SqlReservationsRepository(ConnectionString));
 
             throw new InvalidOperationException(
                 $"Unknown controller type: {controllerType}.");

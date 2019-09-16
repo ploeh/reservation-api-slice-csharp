@@ -19,8 +19,8 @@ namespace Ploeh.Samples.BookingApi.UnitTests
         public void PostInvalidDto(int capacity)
         {
             var sut = new ReservationsController(
-                new FakeReservationsRepository(),
-                capacity);
+                capacity,
+                new FakeReservationsRepository());
 
             var dto = new ReservationDto { };
             var actual = sut.Post(dto);
@@ -39,7 +39,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             int quantity)
         {
             var repository = new FakeReservationsRepository();
-            var sut = new ReservationsController(repository, capacity);
+            var sut = new ReservationsController(capacity, repository);
 
             var dto = new ReservationDto
             {
@@ -62,7 +62,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             int quantity)
         {
             var repository = new FakeReservationsRepository();
-            var sut = new ReservationsController(repository, capacity);
+            var sut = new ReservationsController(capacity, repository);
 
             var dto = new ReservationDto
             {
@@ -83,7 +83,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
         public void PostValidDtoWhenSoldOut(int capacity, int quantity)
         {
             var repository = new FakeReservationsRepository();
-            var sut = new ReservationsController(repository, capacity);
+            var sut = new ReservationsController(capacity, repository);
 
             var dto = new ReservationDto
             {
