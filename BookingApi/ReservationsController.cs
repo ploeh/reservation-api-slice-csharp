@@ -32,14 +32,13 @@ namespace Ploeh.Samples.BookingApi
             if (!DateTime.TryParse(dto.Date, out var _))
                 return BadRequest($"Invalid date: {dto.Date}.");
 
-            var reservation = Mapper.Map(dto);
+            Reservation reservation = Mapper.Map(dto);
 
             if (reservation.Date < DateTime.Now)
                 return BadRequest($"Invalid date: {reservation.Date}.");
 
             var reservations = Repository.ReadReservations(reservation.Date);
-
-            var accepted = maîtreD.CanAccept(reservations, reservation);
+            bool accepted = maîtreD.CanAccept(reservations, reservation);
             if (!accepted)
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,
