@@ -29,9 +29,8 @@ namespace Ploeh.Samples.BookingApi
 
         public ActionResult Post(ReservationDto dto)
         {
-            var validationMsg = Validator.Validate(dto);
-            if (validationMsg != "")
-                return BadRequest(validationMsg);
+            if (!DateTime.TryParse(dto.Date, out var _))
+                return BadRequest($"Invalid date: {dto.Date}.");
 
             var reservation = Mapper.Map(dto);
             var reservations = Repository.ReadReservations(reservation.Date);
