@@ -18,17 +18,20 @@ namespace Ploeh.Samples.BookingApi
         public ReservationsController(
             TimeSpan seatingDuration,
             IReadOnlyCollection<Table> tables,
-            IReservationsRepository repository)
+            IReservationsRepository repository,
+            ILog log)
         {
             SeatingDuration = seatingDuration;
             Tables = tables;
             Repository = repository;
+            Log = log;
             maîtreD = new MaîtreD(seatingDuration, tables);
         }
 
         public TimeSpan SeatingDuration { get; }
         public IReadOnlyCollection<Table> Tables { get; }
         public IReservationsRepository Repository { get; }
+        public ILog Log { get; }
 
         public ActionResult Post(ReservationDto dto)
         {

@@ -35,7 +35,8 @@ namespace Ploeh.Samples.BookingApi
                 return new ReservationsController(
                     SeatingDuration,
                     Tables,
-                    new SqlReservationsRepository(ConnectionString));
+                    new SqlReservationsRepository(ConnectionString),
+                    NullLog.Singleton);
 
             throw new InvalidOperationException(
                 $"Unknown controller type: {controllerType}.");
