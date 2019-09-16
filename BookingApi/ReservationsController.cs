@@ -40,9 +40,9 @@ namespace Ploeh.Samples.BookingApi
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,
                     "Couldn't accept.");
+
             Repository.Create(reservation);
-            var id = Repository.ReadReservationId(reservation.Id);
-            return Ok(id);
+            return Ok();
         }
     }
 }

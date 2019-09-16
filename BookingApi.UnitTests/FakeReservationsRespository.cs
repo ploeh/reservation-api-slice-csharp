@@ -17,11 +17,6 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             Add(key, reservation);
         }
 
-        public int ReadReservationId(Guid guid)
-        {
-            return this.Single(kvp => kvp.Value.Id == guid).Key;
-        }
-
         public IEnumerable<Reservation> ReadReservations(DateTime date)
         {
             var min = date.Date;

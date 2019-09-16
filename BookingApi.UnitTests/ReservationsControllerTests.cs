@@ -48,7 +48,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             };
             var actual = sut.Post(dto);
 
-            Assert.IsAssignableFrom<OkObjectResult>(actual);
+            Assert.IsAssignableFrom<OkResult>(actual);
             Assert.NotEmpty(repository);
         }
 
