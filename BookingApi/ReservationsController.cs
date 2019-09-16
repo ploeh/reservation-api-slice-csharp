@@ -33,6 +33,10 @@ namespace Ploeh.Samples.BookingApi
                 return BadRequest($"Invalid date: {dto.Date}.");
 
             var reservation = Mapper.Map(dto);
+
+            if (reservation.Date < DateTime.Now)
+                return BadRequest($"Invalid date: {reservation.Date}.");
+
             var reservations = Repository.ReadReservations(reservation.Date);
 
             var accepted = maîtreD.CanAccept(reservations, reservation);

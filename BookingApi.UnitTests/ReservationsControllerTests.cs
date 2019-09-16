@@ -32,6 +32,29 @@ namespace Ploeh.Samples.BookingApi.UnitTests
 
         [Theory]
         [InlineData(10, 1)]
+        [InlineData(9, 9)]
+        [InlineData(30, 4)]
+        public void PostPastReservationWhenNoPriorReservationsExist(
+            int capacity,
+            int quantity)
+        {
+            var repository = new FakeReservationsRepository();
+            var sut = new ReservationsController(repository, capacity);
+
+            var dto = new ReservationDto
+            {
+                Date = "2019-08-20", // This is already in the past...
+                Quantity = quantity
+            };
+            var actual = sut.Post(dto);
+
+            var br = Assert.IsAssignableFrom<BadRequestObjectResult>(actual);
+            var msg = Assert.IsAssignableFrom<string>(br.Value);
+            Assert.NotEmpty(msg);
+        }
+
+        [Theory]
+        [InlineData(10, 1)]
         [InlineData( 9, 9)]
         [InlineData(30, 4)]
         public void PostValidDtoWhenNoPriorReservationsExist(
@@ -43,7 +66,8 @@ namespace Ploeh.Samples.BookingApi.UnitTests
 
             var dto = new ReservationDto
             {
-                Date = "2019-08-20",
+                // Assume that it takes less than a year to run the test:
+                Date = DateTime.Now.AddYears(1).ToString(),
                 Quantity = quantity
             };
             var actual = sut.Post(dto);
@@ -63,7 +87,8 @@ namespace Ploeh.Samples.BookingApi.UnitTests
 
             var dto = new ReservationDto
             {
-                Date = "2019-08-20",
+                // Assume that it takes less than a year to run the test:
+                Date = DateTime.Now.AddYears(1).ToString(),
                 Quantity = quantity
             };
             var actual = sut.Post(dto);
