@@ -7,11 +7,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Ploeh.Samples.BookingApi.UnitTests
 {
     public class ReservationsControllerTests
     {
+        private readonly ITestOutputHelper testOutput;
+
+        public ReservationsControllerTests(ITestOutputHelper testOutput)
+        {
+            this.testOutput = testOutput;
+        }
+
         [Theory]
         [InlineData(10)]
         [InlineData( 1)]
@@ -22,7 +30,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 TimeSpan.FromHours(2.5),
                 new[] { new Table(capacity) },
                 new FakeReservationsRepository(),
-                NullLog.Singleton);
+                new TestOutputLog(testOutput));
 
             var dto = new ReservationDto { };
             var actual = sut.Post(dto);
@@ -45,7 +53,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 TimeSpan.FromHours(2.5),
                 new[] { new Table(capacity) },
                 repository,
-                NullLog.Singleton);
+                new TestOutputLog(testOutput));
 
             var dto = new ReservationDto
             {
@@ -72,7 +80,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 TimeSpan.FromHours(2.5),
                 new[] { new Table(capacity) },
                 repository,
-                NullLog.Singleton);
+                new TestOutputLog(testOutput));
 
             var dto = new ReservationDto
             {
@@ -97,7 +105,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 TimeSpan.FromHours(2.5),
                 new[] { new Table(capacity) },
                 repository,
-                NullLog.Singleton);
+                new TestOutputLog(testOutput));
 
             var dto = new ReservationDto
             {
