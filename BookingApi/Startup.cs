@@ -3,6 +3,7 @@
  * only, under the condition that this header remains intact. */
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -17,10 +18,14 @@ namespace Ploeh.Samples.BookingApi
     public class Startup
     {
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment Environment { get; }
 
-        public Startup(IConfiguration configuration)
+        public Startup(
+            IConfiguration configuration,
+            IHostingEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -35,8 +40,17 @@ namespace Ploeh.Samples.BookingApi
                 .ToArray();
             var capacity = Configuration.GetValue<int>("Capacity");
             var connectionString = Configuration.GetConnectionString("Booking");
+
+            var rootDir = Directory.GetParent(Environment.ContentRootPath);
+            var logFile =
+                new FileInfo(Path.Combine(rootDir.FullName, "log.txt"));
+
             services.AddSingleton<IControllerActivator>(
-                new CompositionRoot(seatingDuration, tables, connectionString));
+                new CompositionRoot(
+                    seatingDuration,
+                    tables,
+                    connectionString,
+                    logFile));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

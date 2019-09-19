@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,16 +16,19 @@ namespace Ploeh.Samples.BookingApi
         public CompositionRoot(
             TimeSpan seatingDuration,
             IReadOnlyCollection<Table> tables,
-            string connectionString)
+            string connectionString,
+            FileInfo logFile)
         {
             SeatingDuration = seatingDuration;
             Tables = tables;
             ConnectionString = connectionString;
+            LogFile = logFile;
         }
 
         public TimeSpan SeatingDuration { get; }
         public IReadOnlyCollection<Table> Tables { get; }
         public string ConnectionString { get; }
+        public FileInfo LogFile { get; }
 
         public object Create(ControllerContext context)
         {
@@ -36,7 +40,7 @@ namespace Ploeh.Samples.BookingApi
                     SeatingDuration,
                     Tables,
                     new SqlReservationsRepository(ConnectionString),
-                    NullLog.Singleton);
+                    new FileLog(LogFile));
 
             throw new InvalidOperationException(
                 $"Unknown controller type: {controllerType}.");
