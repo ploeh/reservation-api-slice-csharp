@@ -35,22 +35,36 @@ namespace Ploeh.Samples.BookingApi
 
         public ActionResult Post(ReservationDto dto)
         {
+            Log.Debug($"Entering {nameof(Post)} method...");
             if (!DateTime.TryParse(dto.Date, out var _))
+            {
+                Log.Warning("Invalid reservation date.");
                 return BadRequest($"Invalid date: {dto.Date}.");
+            }
 
+            Log.Debug("Mapping DTO to Domain Model.");
             Reservation reservation = Mapper.Map(dto);
 
             if (reservation.Date < DateTime.Now)
+            {
+                Log.Warning("Invalid reservation date.");
                 return BadRequest($"Invalid date: {reservation.Date}.");
+            }
 
+            Log.Debug("Reading existing reservations from database.");
             var reservations = Repository.ReadReservations(reservation.Date);
             bool accepted = maîtreD.CanAccept(reservations, reservation);
             if (!accepted)
+            {
+                Log.Warning("Not enough capacity");
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,
                     "Couldn't accept.");
+            }
 
+            Log.Info("Adding reservation to database.");
             Repository.Create(reservation);
+            Log.Debug($"Leaving {nameof(Post)} method...");
             return Ok();
         }
     }
