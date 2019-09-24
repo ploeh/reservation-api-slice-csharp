@@ -50,16 +50,17 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             int quantity)
         {
             var repository = new FakeReservationsRepository();
+            var now = new DateTime(2019, 8, 21);
             var sut = new ReservationsController(
                 TimeSpan.FromHours(2.5),
                 new[] { new Table(capacity) },
                 repository,
-                new SystemClock(),
+                new ConstantClock(now),
                 new TestOutputLog(testOutput));
 
             var dto = new ReservationDto
             {
-                Date = "2019-08-20", // This is already in the past...
+                Date = now.Subtract(TimeSpan.FromDays(1)).ToString(),
                 Quantity = quantity
             };
             var actual = sut.Post(dto);
@@ -78,17 +79,17 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             int quantity)
         {
             var repository = new FakeReservationsRepository();
+            var now = new DateTime(2019, 9, 24);
             var sut = new ReservationsController(
                 TimeSpan.FromHours(2.5),
                 new[] { new Table(capacity) },
                 repository,
-                new SystemClock(),
+                new ConstantClock(now),
                 new TestOutputLog(testOutput));
 
             var dto = new ReservationDto
             {
-                // Assume that it takes less than a year to run the test:
-                Date = DateTime.Now.AddYears(1).ToString(),
+                Date = now.AddDays(1).ToString(),
                 Quantity = quantity
             };
             var actual = sut.Post(dto);
@@ -104,17 +105,17 @@ namespace Ploeh.Samples.BookingApi.UnitTests
         public void PostValidDtoWhenSoldOut(int capacity, int quantity)
         {
             var repository = new FakeReservationsRepository();
+            var now = new DateTime(2019, 9, 27);
             var sut = new ReservationsController(
                 TimeSpan.FromHours(2.5),
                 new[] { new Table(capacity) },
                 repository,
-                new SystemClock(),
+                new ConstantClock(now),
                 new TestOutputLog(testOutput));
 
             var dto = new ReservationDto
             {
-                // Assume that it takes less than a year to run the test:
-                Date = DateTime.Now.AddYears(1).ToString(),
+                Date = now.AddDays(2).ToString(),
                 Quantity = quantity
             };
             var actual = sut.Post(dto);

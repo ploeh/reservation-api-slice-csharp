@@ -1,7 +1,8 @@
-﻿/* Copyright (c) Mark Seemann 2019 all rights reserved
+/* Copyright (c) Mark Seemann 2019 all rights reserved
  * Permission is hereby granted to share this code for educational purposes
  * only, under the condition that this header remains intact. */
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -30,7 +31,9 @@ namespace Ploeh.Samples.BookingApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            var logs = new ConcurrentDictionary<object, ScopedLog>();
+            var logFilter = new LogFilter(logs);
+            services.AddMvc().AddMvcOptions(o => o.Filters.Add(logFilter));
 
             var seatingDuration =
                 Configuration.GetValue<TimeSpan>("SeatingDuration");
@@ -50,6 +53,7 @@ namespace Ploeh.Samples.BookingApi
                     seatingDuration,
                     tables,
                     connectionString,
+                    logs,
                     logFile));
         }
 
