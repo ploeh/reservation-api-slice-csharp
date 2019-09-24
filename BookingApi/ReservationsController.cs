@@ -19,11 +19,13 @@ namespace Ploeh.Samples.BookingApi
             TimeSpan seatingDuration,
             IReadOnlyCollection<Table> tables,
             IReservationsRepository repository,
+            IClock clock,
             ILog log)
         {
             SeatingDuration = seatingDuration;
             Tables = tables;
             Repository = repository;
+            Clock = clock;
             Log = log;
             maîtreD = new MaîtreD(seatingDuration, tables);
         }
@@ -31,6 +33,7 @@ namespace Ploeh.Samples.BookingApi
         public TimeSpan SeatingDuration { get; }
         public IReadOnlyCollection<Table> Tables { get; }
         public IReservationsRepository Repository { get; }
+        public IClock Clock { get; }
         public ILog Log { get; }
 
         public ActionResult Post(ReservationDto dto)
@@ -45,7 +48,7 @@ namespace Ploeh.Samples.BookingApi
             Log.Debug("Mapping DTO to Domain Model.");
             Reservation reservation = Mapper.Map(dto);
 
-            if (reservation.Date < DateTime.Now)
+            if (reservation.Date < Clock.GetCurrentDateTime())
             {
                 Log.Warning("Invalid reservation date.");
                 return BadRequest($"Invalid date: {reservation.Date}.");

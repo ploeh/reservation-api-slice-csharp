@@ -40,6 +40,7 @@ namespace Ploeh.Samples.BookingApi
                     SeatingDuration,
                     Tables,
                     new SqlReservationsRepository(ConnectionString),
+                    new SystemClock(),
                     new FileLog(LogFile));
 
             throw new InvalidOperationException(
