@@ -27,7 +27,12 @@ namespace Ploeh.Samples.BookingApi
                 var operation = context.ActionDescriptor.DisplayName;
                 if (context.ActionDescriptor is ControllerActionDescriptor cad)
                     operation = cad.MethodInfo.Name;
-                l.StartScope(new Interaction { Operation = operation });
+                l.StartScope(
+                    new Interaction
+                    {
+                        Operation = operation,
+                        Input = context.ActionArguments
+                    });
             }
         }
 

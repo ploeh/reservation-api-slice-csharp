@@ -27,7 +27,7 @@ namespace Ploeh.Samples.BookingApi
                 new Interaction
                 {
                     Operation = nameof(Create),
-                    Input = reservation
+                    Input = new { reservation }
                 });
             Inner.Create(reservation);
         }
@@ -39,7 +39,7 @@ namespace Ploeh.Samples.BookingApi
                 new Interaction
                 {
                     Operation = nameof(ReadReservations),
-                    Input = date,
+                    Input = new { date },
                     Output = reservations
                 });
             return reservations;

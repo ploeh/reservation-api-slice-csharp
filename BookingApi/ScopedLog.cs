@@ -28,6 +28,8 @@ namespace Ploeh.Samples.BookingApi
 
         public void StartScope(Interaction entry)
         {
+            if (entry.Time == null)
+                entry.Time = DateTimeOffset.Now.ToString("o");
             this.entry = entry;
         }
 
