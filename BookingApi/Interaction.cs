@@ -5,6 +5,7 @@ namespace Ploeh.Samples.BookingApi
 {
     public class Interaction
     {
+        public string Time { get; set; }
         public string Operation { get; set; }
         public object Input { get; set; }
         public object Output { get; set; }

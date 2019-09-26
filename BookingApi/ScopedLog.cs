@@ -1,7 +1,8 @@
-﻿/* Copyright (c) Mark Seemann 2019 all rights reserved
+/* Copyright (c) Mark Seemann 2019 all rights reserved
  * Permission is hereby granted to share this code for educational purposes
  * only, under the condition that this header remains intact. */
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace Ploeh.Samples.BookingApi
@@ -24,6 +25,8 @@ namespace Ploeh.Samples.BookingApi
 
         public void Observe(Interaction interaction)
         {
+            if (interaction.Time == null)
+                interaction.Time = DateTimeOffset.Now.ToString("o");
             observations.Add(interaction);
         }
 

@@ -41,7 +41,7 @@ namespace Ploeh.Samples.BookingApi
         private void Write(string message)
         {
             using (var writer = LogFile.AppendText())
-                writer.WriteLine("{0}: {1}", DateTimeOffset.Now, message);
+                writer.WriteLine(message);
         }
     }
 }
