@@ -15,6 +15,7 @@ namespace Ploeh.Samples.BookingApi
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
+        private Interaction entry;
         private readonly List<Interaction> interactions;
 
         public ILog Log { get; }
@@ -25,8 +26,9 @@ namespace Ploeh.Samples.BookingApi
             interactions = new List<Interaction>();
         }
 
-        public void StartScope()
+        public void StartScope(Interaction entry)
         {
+            this.entry = entry;
         }
 
         public void Observe(Interaction interaction)
@@ -38,7 +40,7 @@ namespace Ploeh.Samples.BookingApi
 
         public void EndScope()
         {
-            dynamic json = new { interactions };
+            dynamic json = new { entry, interactions };
             var s = JsonConvert.SerializeObject(json, serializerSettings);
             Log.Info(s);
         }
