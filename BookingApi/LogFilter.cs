@@ -39,7 +39,7 @@ namespace Ploeh.Samples.BookingApi
         public void OnActionExecuted(ActionExecutedContext context)
         {
             if (Logs.TryRemove(context.Controller, out var l))
-                l.EndScope();
+                l.EndScope(new Interaction { Output = context.Result });
         }
     }
 }

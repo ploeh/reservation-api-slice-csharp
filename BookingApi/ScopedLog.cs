@@ -40,9 +40,12 @@ namespace Ploeh.Samples.BookingApi
             interactions.Add(interaction);
         }
 
-        public void EndScope()
+        public void EndScope(Interaction exit)
         {
-            dynamic json = new { entry, interactions };
+            if (exit.Time == null)
+                exit.Time = DateTimeOffset.Now.ToString("o");
+
+            dynamic json = new { entry, interactions, exit };
             var s = JsonConvert.SerializeObject(json, serializerSettings);
             Log.Info(s);
         }
