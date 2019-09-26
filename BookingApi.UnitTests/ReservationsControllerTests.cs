@@ -30,8 +30,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 TimeSpan.FromHours(2.5),
                 new[] { new Table(capacity) },
                 new FakeReservationsRepository(),
-                new SystemClock(),
-                new TestOutputLog(testOutput));
+                new SystemClock());
 
             var dto = new ReservationDto { };
             var actual = sut.Post(dto);
@@ -55,8 +54,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 TimeSpan.FromHours(2.5),
                 new[] { new Table(capacity) },
                 repository,
-                new ConstantClock(now),
-                new TestOutputLog(testOutput));
+                new ConstantClock(now));
 
             var dto = new ReservationDto
             {
@@ -84,8 +82,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 TimeSpan.FromHours(2.5),
                 new[] { new Table(capacity) },
                 repository,
-                new ConstantClock(now),
-                new TestOutputLog(testOutput));
+                new ConstantClock(now));
 
             var dto = new ReservationDto
             {
@@ -110,8 +107,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 TimeSpan.FromHours(2.5),
                 new[] { new Table(capacity) },
                 repository,
-                new ConstantClock(now),
-                new TestOutputLog(testOutput));
+                new ConstantClock(now));
 
             var dto = new ReservationDto
             {

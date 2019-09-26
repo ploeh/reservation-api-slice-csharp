@@ -50,8 +50,7 @@ namespace Ploeh.Samples.BookingApi
                         l),
                     new LogClock(
                         new SystemClock(),
-                        l),
-                    NullLog.Singleton);
+                        l));
                 Logs.AddOrUpdate(controller, l, (_, x) => x);
                 return controller;
             }
