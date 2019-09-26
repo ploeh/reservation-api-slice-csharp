@@ -2,6 +2,7 @@
  * Permission is hereby granted to share this code for educational purposes
  * only, under the condition that this header remains intact. */
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 
@@ -9,14 +10,19 @@ namespace Ploeh.Samples.BookingApi
 {
     public class ScopedLog
     {
-        private readonly List<Interaction> observations;
+        private readonly static JsonSerializerSettings serializerSettings =
+            new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+        private readonly List<Interaction> interactions;
 
         public ILog Log { get; }
 
         public ScopedLog(ILog log)
         {
             Log = log;
-            observations = new List<Interaction>();
+            interactions = new List<Interaction>();
         }
 
         public void StartScope()
@@ -27,13 +33,13 @@ namespace Ploeh.Samples.BookingApi
         {
             if (interaction.Time == null)
                 interaction.Time = DateTimeOffset.Now.ToString("o");
-            observations.Add(interaction);
+            interactions.Add(interaction);
         }
 
         public void EndScope()
         {
-            dynamic json = new { observations };
-            var s = JsonConvert.SerializeObject(json);
+            dynamic json = new { interactions };
+            var s = JsonConvert.SerializeObject(json, serializerSettings);
             Log.Info(s);
         }
     }
