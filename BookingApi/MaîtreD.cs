@@ -10,12 +10,14 @@ namespace Ploeh.Samples.BookingApi
 {
     public class MaîtreD
     {
-        public MaîtreD(int capacity)
+        public MaîtreD(IReadOnlyCollection<Table> tables)
         {
-            Capacity = capacity;
+            Capacity = tables.Sum(t => t.Seats);
+            Tables = tables;
         }
 
         public int Capacity { get; }
+        public IReadOnlyCollection<Table> Tables { get; }
 
         public bool CanAccept(
             IEnumerable<Reservation> reservations,

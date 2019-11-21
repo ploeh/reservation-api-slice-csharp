@@ -21,7 +21,7 @@ namespace Ploeh.Samples.BookingApi
         {
             Repository = repository;
             Capacity = capacity;
-            maîtreD = new MaîtreD(Capacity);
+            maîtreD = new MaîtreD(new[] { new Table(Capacity) });
         }
 
         public IReservationsRepository Repository { get; }

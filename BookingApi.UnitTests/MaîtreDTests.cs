@@ -15,7 +15,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
         [InlineData("2019-09-29", 10, 10)]
         [InlineData("2020-10-28", 20, 20)]
         [InlineData("2021-11-27",  1, 22)]
-        public void CanAcceptReturnsReservationInHappyPathScenario(
+        public void CanAcceptWhenCommunalTableHasEnoughCapacity(
             string date,
             int quantity,
             int capacity)
@@ -25,7 +25,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 Date = DateTime.Parse(date),
                 Quantity = quantity
             };
-            var sut = new MaîtreD(capacity);
+            var sut = new MaîtreD(new[] { new Table(capacity) });
 
             var actual = sut.CanAccept(new Reservation[0], reservation);
 
@@ -36,14 +36,16 @@ namespace Ploeh.Samples.BookingApi.UnitTests
         [InlineData( 4, 10)]
         [InlineData( 3,  3)]
         [InlineData(11, 14)]
-        public void CanAcceptOnInsufficientCapacity(int quantity, int capacity)
+        public void CanNotAcceptWhenCommunialTableHasInsufficientCapacity(
+            int quantity,
+            int capacity)
         {
             var reservation = new Reservation
             {
                 Date = new DateTime(2018, 8, 30),
                 Quantity = quantity
             };
-            var sut = new MaîtreD(capacity);
+            var sut = new MaîtreD(new[] { new Table(capacity) });
 
             var actual = sut.CanAccept(
                 new[] { new Reservation { Quantity = 7 } },
