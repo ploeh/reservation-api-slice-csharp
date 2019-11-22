@@ -223,5 +223,38 @@ namespace Ploeh.Samples.BookingApi.UnitTests
 
             Assert.Equal(expected, actual);
         }
+
+        [Theory]
+        [InlineData(120,    new[] { 1 },    new[] { 1 }, 1)]
+        [InlineData( 90, new[] { 2, 3 }, new[] { 2, 3 }, 2)]
+        [InlineData( 90, new[] { 2, 3 }, new[] { 2, 3 }, 3)]
+        [InlineData(100, new[] { 2, 3 }, new[] { 2, 2 }, 3)]
+        public void AcceptWhenOtherReservationsStartASeatingDurationAfterReservation(
+            double seatingDuration,
+            int[] seats,
+            int[] reservations,
+            int quantity)
+        {
+            var dt = new DateTime(2019, 11, 22, 18, 0, 0);
+            var reservation = new Reservation
+            {
+                Date = dt,
+                Quantity = quantity
+            };
+            var sut = new MaîtreD(
+                TimeSpan.FromMinutes(seatingDuration),
+                seats.Select(s => new Table(s)).ToArray());
+
+            var actual = sut.CanAccept(
+                reservations.Select(x =>
+                    new Reservation
+                    {
+                        Date = dt.AddMinutes(seatingDuration),
+                        Quantity = x
+                    }).ToArray(),
+                reservation);
+
+            Assert.True(actual);
+        }
     }
 }

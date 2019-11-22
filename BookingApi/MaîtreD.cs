@@ -31,7 +31,10 @@ namespace Ploeh.Samples.BookingApi
             Reservation reservation)
         {
             var remainingTables = Tables.ToList();
-            foreach (var r in reservations.OrderBy(x => x.Quantity))
+            var relevantReservations = reservations
+                .Where(r => r.Date < reservation.Date.Add(SeatingDuration))
+                .OrderBy(r => r.Quantity);
+            foreach (var r in relevantReservations)
             {
                 var idx =
                     remainingTables.FindIndex(t => r.Quantity <= t.Seats);
