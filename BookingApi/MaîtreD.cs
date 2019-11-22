@@ -10,25 +10,32 @@ namespace Ploeh.Samples.BookingApi
 {
     public class MaîtreD
     {
-        public MaîtreD(IReadOnlyCollection<Table> tables)
+        public MaîtreD(IReadOnlyCollection<Table> tables) :
+            this(tables.ToArray())
         {
-            Capacity = tables.Sum(t => t.Seats);
-            Tables = tables;
         }
 
-        public int Capacity { get; }
+        public MaîtreD(params Table[] tables)
+        {
+            Tables = tables.OrderBy(t => t.Seats).ToArray();
+        }
+
         public IReadOnlyCollection<Table> Tables { get; }
 
         public bool CanAccept(
             IEnumerable<Reservation> reservations,
             Reservation reservation)
         {
-            var reservedSeats = reservations.Sum(r => r.Quantity);
-
-            if (Capacity < reservedSeats + reservation.Quantity)
-                return false;
-
-            return true;
+            var remainingTables = Tables.ToList();
+            foreach (var r in reservations.OrderBy(x => x.Quantity))
+            {
+                var idx =
+                    remainingTables.FindIndex(t => r.Quantity <= t.Seats);
+                if (idx < 0)
+                    return false;
+                remainingTables.RemoveAt(idx);
+            }
+            return remainingTables.Any(t => reservation.Quantity <= t.Seats);
         }
     }
 }
