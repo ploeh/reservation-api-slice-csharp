@@ -26,7 +26,9 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 Date = DateTime.Parse(date),
                 Quantity = quantity
             };
-            var sut = new MaîtreD(new Table(capacity));
+            var sut = new MaîtreD(
+                TimeSpan.FromHours(2),
+                new Table(capacity));
 
             var actual = sut.CanAccept(new Reservation[0], reservation);
 
@@ -46,7 +48,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 Date = new DateTime(2018, 8, 30),
                 Quantity = quantity
             };
-            var sut = new MaîtreD(new Table(capacity));
+            var sut = new MaîtreD(TimeSpan.FromHours(2), new Table(capacity));
 
             var actual = sut.CanAccept(
                 new[] { new Reservation { Quantity = 7 } },
@@ -66,7 +68,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 Date = new DateTime(2019, 11, 21),
                 Quantity = quantity
             };
-            var sut = new MaîtreD();
+            var sut = new MaîtreD(TimeSpan.FromHours(2));
 
             var actual = sut.CanAccept(new Reservation[0], reservation);
 
@@ -84,7 +86,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 Date = new DateTime(2019, 11, 20),
                 Quantity = quantity
             };
-            var sut = new MaîtreD(new Table(quantity));
+            var sut = new MaîtreD(TimeSpan.FromHours(2), new Table(quantity));
 
             var actual = sut.CanAccept(new Reservation[0], reservation);
 
@@ -103,7 +105,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 Date = dt,
                 Quantity = quantity
             };
-            var sut = new MaîtreD(new Table(quantity));
+            var sut = new MaîtreD(TimeSpan.FromHours(2), new Table(quantity));
 
             var actual = sut.CanAccept(
                 new[] { new Reservation { Date = dt, Quantity = quantity } },
@@ -125,7 +127,9 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 Date = dt,
                 Quantity = capacity + 1
             };
-            var sut = new MaîtreD(seats.Select(s => new Table(s)).ToArray());
+            var sut = new MaîtreD(
+                TimeSpan.FromHours(2),
+                seats.Select(s => new Table(s)).ToArray());
 
             var actual = sut.CanAccept(new Reservation[0], reservation);
 
@@ -144,7 +148,9 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 Date = dt,
                 Quantity = 1
             };
-            var sut = new MaîtreD(seats.Select(s => new Table(s)).ToArray());
+            var sut = new MaîtreD(
+                TimeSpan.FromHours(2),
+                seats.Select(s => new Table(s)).ToArray());
 
             var actual = sut.CanAccept(
                 seats.Select(s => new Reservation { Date = dt, Quantity = s }),
@@ -166,7 +172,9 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 Date = dt,
                 Quantity = biggestTable + 1
             };
-            var sut = new MaîtreD(seats.Select(s => new Table(s)).ToArray());
+            var sut = new MaîtreD(
+                TimeSpan.FromHours(2),
+                seats.Select(s => new Table(s)).ToArray());
 
             var actual = sut.CanAccept(new Reservation[0], reservation);
 
@@ -203,7 +211,9 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                 Date = dt,
                 Quantity = quantity
             };
-            var sut = new MaîtreD(seats.Select(s => new Table(s)).ToArray());
+            var sut = new MaîtreD(
+                TimeSpan.FromHours(2),
+                seats.Select(s => new Table(s)).ToArray());
 
             var actual = sut.CanAccept(
                 reservations

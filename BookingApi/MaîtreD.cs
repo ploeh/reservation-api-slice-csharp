@@ -10,16 +10,20 @@ namespace Ploeh.Samples.BookingApi
 {
     public class MaîtreD
     {
-        public MaîtreD(IReadOnlyCollection<Table> tables) :
-            this(tables.ToArray())
+        public MaîtreD(
+            TimeSpan seatingDuration,
+            IReadOnlyCollection<Table> tables) :
+            this(seatingDuration, tables.ToArray())
         {
         }
 
-        public MaîtreD(params Table[] tables)
+        public MaîtreD(TimeSpan seatingDuration, params Table[] tables)
         {
             Tables = tables.OrderBy(t => t.Seats).ToArray();
+            SeatingDuration = seatingDuration;
         }
 
+        public TimeSpan SeatingDuration { get; }
         public IReadOnlyCollection<Table> Tables { get; }
 
         public bool CanAccept(
