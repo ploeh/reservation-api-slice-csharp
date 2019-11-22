@@ -43,15 +43,16 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             int quantity,
             int capacity)
         {
+            DateTime dt = new DateTime(2018, 8, 30);
             var reservation = new Reservation
             {
-                Date = new DateTime(2018, 8, 30),
+                Date = dt,
                 Quantity = quantity
             };
             var sut = new MaîtreD(TimeSpan.FromHours(2), new Table(capacity));
 
             var actual = sut.CanAccept(
-                new[] { new Reservation { Quantity = 7 } },
+                new[] { new Reservation { Date = dt, Quantity = 7 } },
                 reservation);
 
             Assert.False(actual);
@@ -250,6 +251,38 @@ namespace Ploeh.Samples.BookingApi.UnitTests
                     new Reservation
                     {
                         Date = dt.AddMinutes(seatingDuration),
+                        Quantity = x
+                    }).ToArray(),
+                reservation);
+
+            Assert.True(actual);
+        }
+
+        [Theory]
+        [InlineData(130, new[]    { 1 }, new[]    { 1 }, 1)]
+        [InlineData( 90, new[] { 4, 3 }, new[] { 2, 2 }, 4)]
+        [InlineData(100, new[] { 4, 3 }, new[] { 3, 4 }, 3)]
+        public void AcceptWhenOtherReservationsEndBeforeReservationStarts(
+            double seatingDuration,
+            int[] seats,
+            int[] reservations,
+            int quantity)
+        {
+            var dt = new DateTime(2019, 11, 22, 18, 30, 0);
+            var reservation = new Reservation
+            {
+                Date = dt,
+                Quantity = quantity
+            };
+            var sut = new MaîtreD(
+                TimeSpan.FromMinutes(seatingDuration),
+                seats.Select(s => new Table(s)).ToArray());
+
+            var actual = sut.CanAccept(
+                reservations.Select(x =>
+                    new Reservation
+                    {
+                        Date = dt.Subtract(TimeSpan.FromMinutes(seatingDuration)),
                         Quantity = x
                     }).ToArray(),
                 reservation);

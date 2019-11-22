@@ -32,7 +32,9 @@ namespace Ploeh.Samples.BookingApi
         {
             var remainingTables = Tables.ToList();
             var relevantReservations = reservations
-                .Where(r => r.Date < reservation.Date.Add(SeatingDuration))
+                .Where(r =>
+                    reservation.Date.Subtract(SeatingDuration) < r.Date &&
+                    r.Date < reservation.Date.Add(SeatingDuration))
                 .OrderBy(r => r.Quantity);
             foreach (var r in relevantReservations)
             {
