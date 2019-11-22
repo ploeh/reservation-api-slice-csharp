@@ -12,12 +12,17 @@ namespace Ploeh.Samples.BookingApi
 {
     public class CompositionRoot : IControllerActivator
     {
-        public CompositionRoot(int capacity, string connectionString)
+        public CompositionRoot(
+            TimeSpan seatingDuration,
+            int capacity,
+            string connectionString)
         {
+            SeatingDuration = seatingDuration;
             Capacity = capacity;
             ConnectionString = connectionString;
         }
 
+        public TimeSpan SeatingDuration { get; }
         public int Capacity { get; }
         public string ConnectionString { get; }
 
@@ -28,6 +33,7 @@ namespace Ploeh.Samples.BookingApi
 
             if (controllerType == typeof(ReservationsController))
                 return new ReservationsController(
+                    SeatingDuration,
                     Capacity,
                     new SqlReservationsRepository(ConnectionString));
 

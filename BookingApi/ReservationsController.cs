@@ -16,13 +16,14 @@ namespace Ploeh.Samples.BookingApi
         private readonly MaîtreD maîtreD;
 
         public ReservationsController(
+            TimeSpan seatingDuration,
             int capacity,
             IReservationsRepository repository)
         {
             Repository = repository;
             Capacity = capacity;
             maîtreD = new MaîtreD(
-                TimeSpan.FromHours(2.5),
+                seatingDuration,
                 new[] { new Table(Capacity) });
         }
 

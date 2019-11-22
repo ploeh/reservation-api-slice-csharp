@@ -27,10 +27,15 @@ namespace Ploeh.Samples.BookingApi
         {
             services.AddMvc();
 
+            var seatingDuration =
+                Configuration.GetValue<TimeSpan>("SeatingDuration");
             var capacity = Configuration.GetValue<int>("Capacity");
             var connectionString = Configuration.GetConnectionString("Booking");
             services.AddSingleton<IControllerActivator>(
-                new CompositionRoot(capacity, connectionString));
+                new CompositionRoot(
+                    seatingDuration,
+                    capacity,
+                    connectionString));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
