@@ -32,9 +32,7 @@ namespace Ploeh.Samples.BookingApi
         {
             var remainingTables = Tables.ToList();
             var relevantReservations = reservations
-                .Where(r =>
-                    reservation.Date.Subtract(SeatingDuration) < r.Date &&
-                    r.Date < reservation.Date.Add(SeatingDuration))
+                .Where(r => Overlaps(reservation, r))
                 .OrderBy(r => r.Quantity);
             foreach (var r in relevantReservations)
             {
@@ -45,6 +43,16 @@ namespace Ploeh.Samples.BookingApi
                 remainingTables.RemoveAt(idx);
             }
             return remainingTables.Any(t => reservation.Quantity <= t.Seats);
+        }
+
+        private bool Overlaps(Reservation candidate, Reservation existing)
+        {
+            var aSeatingDurationBefore =
+                candidate.Date.Subtract(SeatingDuration);
+            var aSeatingDurationAfter =
+                candidate.Date.Add(SeatingDuration);
+            return aSeatingDurationBefore < existing.Date
+                && existing.Date < aSeatingDurationAfter;
         }
     }
 }
