@@ -14,16 +14,16 @@ namespace Ploeh.Samples.BookingApi
     {
         public CompositionRoot(
             TimeSpan seatingDuration,
-            int capacity,
+            IReadOnlyCollection<Table> tables,
             string connectionString)
         {
             SeatingDuration = seatingDuration;
-            Capacity = capacity;
+            Tables = tables;
             ConnectionString = connectionString;
         }
 
         public TimeSpan SeatingDuration { get; }
-        public int Capacity { get; }
+        public IReadOnlyCollection<Table> Tables { get; }
         public string ConnectionString { get; }
 
         public object Create(ControllerContext context)
@@ -34,7 +34,7 @@ namespace Ploeh.Samples.BookingApi
             if (controllerType == typeof(ReservationsController))
                 return new ReservationsController(
                     SeatingDuration,
-                    Capacity,
+                    Tables,
                     new SqlReservationsRepository(ConnectionString));
 
             throw new InvalidOperationException(

@@ -20,7 +20,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
         {
             var sut = new ReservationsController(
                 TimeSpan.FromHours(2.5),
-                capacity,
+                new[] { new Table(capacity) },
                 new FakeReservationsRepository());
 
             var dto = new ReservationDto { };
@@ -33,7 +33,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
 
         [Theory]
         [InlineData(10, 1)]
-        [InlineData(9, 9)]
+        [InlineData( 9, 9)]
         [InlineData(30, 4)]
         public void PostPastReservationWhenNoPriorReservationsExist(
             int capacity,
@@ -42,7 +42,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             var repository = new FakeReservationsRepository();
             var sut = new ReservationsController(
                 TimeSpan.FromHours(2.5),
-                capacity,
+                new[] { new Table(capacity) },
                 repository);
 
             var dto = new ReservationDto
@@ -68,7 +68,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             var repository = new FakeReservationsRepository();
             var sut = new ReservationsController(
                 TimeSpan.FromHours(2.5),
-                capacity,
+                new[] { new Table(capacity) },
                 repository);
 
             var dto = new ReservationDto
@@ -92,7 +92,7 @@ namespace Ploeh.Samples.BookingApi.UnitTests
             var repository = new FakeReservationsRepository();
             var sut = new ReservationsController(
                 TimeSpan.FromHours(2.5),
-                capacity,
+                new[] { new Table(capacity) },
                 repository);
 
             var dto = new ReservationDto

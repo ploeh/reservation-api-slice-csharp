@@ -29,13 +29,14 @@ namespace Ploeh.Samples.BookingApi
 
             var seatingDuration =
                 Configuration.GetValue<TimeSpan>("SeatingDuration");
+            var tables = Configuration.GetSection("Tables")
+                .Get<int[]>()
+                .Select(i => new Table(i))
+                .ToArray();
             var capacity = Configuration.GetValue<int>("Capacity");
             var connectionString = Configuration.GetConnectionString("Booking");
             services.AddSingleton<IControllerActivator>(
-                new CompositionRoot(
-                    seatingDuration,
-                    capacity,
-                    connectionString));
+                new CompositionRoot(seatingDuration, tables, connectionString));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
